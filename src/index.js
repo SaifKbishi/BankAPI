@@ -36,9 +36,10 @@ app.put(`/api/accounts/credit/:ppID`, (req, res)=>{
 });
 
 //add deposit to account
-app.put(`/api/accounts/deposit/:ppID`, (req, res)=>{
+app.put(`/bank/deposit/:ppID`, async (req, res)=>{
  const {ppID} = req.params;
- const {cash} =req.body;
+ const {cash} = req.body;
+ 
  const addcash = AddDeposit(ppID, cash);
  res.status(200).send(addcash);
 });
@@ -66,6 +67,17 @@ app.delete(`/bank/delete/:name`, (req, res)=>{
  res.status(200).send(deleteAccount);
 });
 
+//display one account
+app.get(`/bank/displayaccount/name`, (req,res)=>{
+ 
+ const {name} = req.params;
+ console.log(name)
+ const anAccount = displayOneAccount(name);
+ res.status(200).send(anAccount);
+});
+
+/********************************************** */
+
 //create new Bank Account
 app.post('/bank/newaccount/', async (req, res)=>{
  console.log('req.body',req.body,'this is from Post to create new record');
@@ -80,23 +92,43 @@ app.post('/bank/newaccount/', async (req, res)=>{
  }
 });
 
-
-
-
-
-//display one account
-app.get(`/bank/displayaccount/name`, (req,res)=>{
- console.log('hello')
- const {name} = req.params;
- console.log(name)
- const anAccount = displayOneAccount(name);
- res.status(200).send(anAccount);
+//create new user
+app.post('/bank/newuser', async(req, res)=>{
+ console.log('new user', req.body);
+ const newUser = new User(req.body);
+ try{
+  console.log(newUser);
+  await newUser.save();
+  res.status(201).send(newUser);
+ }catch(error){
+  console.log('cannot craete user');
+  res.status(400).send({error});
+ }
 });
 
 //retrieve All Accounts
-app.get(`/bank/allaccounts`, (req, res)=>{
- const allAccount = displayAllAccounts();
- res.status(200).send(allAccount);
+app.get(`/bank/allaccounts`, async (req, res)=>{
+ console.log('alla accounts here')
+ const allAccounts = BankAccount.find({});
+  try{
+   let accountMap = {};
+   (await allAccounts).forEach((account)=>{
+    accountMap[account.ppID] = account;
+   });
+   res.status(200).send(accountMap);
+  }catch(err){console.log('err: ', err)} 
+});
+
+//retrive all users
+app.get('/bank/allusers', async(req, res)=>{
+ const allUsers = User.find({});
+ try{
+  let usersMap = {};
+  (await allUsers).forEach((user)=>{
+   usersMap[user._id] = user;
+  });
+  res.status(200).send(usersMap);
+ }catch(err){console.log('err: ', err)} 
 });
 
 

@@ -7,27 +7,24 @@ const User = mongoose.model('user', {
   required: true,
   min: 2
  }, 
- // email:{
- //  type: String,
- //  required: true,
- //  validate(value){
- //   if(!validator.isEmail(value)){
- //    throw new Error('Email address is not valid');
- //   }
- //  }
- // },
- // phone:{
- //  type: String,
- //  required:true,
- //  validate(value){
- //   if (!validator.isMobilePhone(value, "he-IL")) {
- //     throw new Error("phone number most be a valid isrealy phone number");
- //   }
- //  },
- // },
- // address:{
- //  type: String
- // },
+ email:{
+  type: String,
+  required: true,
+  validate(value){
+   if(!validator.isEmail(value)){
+    throw new Error('Email address is not valid');
+   }
+  }
+ },
+ phone:{
+  type: String,
+  required:true,
+  validate(value){
+   if (!validator.isMobilePhone(value, "he-IL")) {
+     throw new Error("phone number most be a valid isrealy phone number");
+   }
+  },
+ },
 });//User
 
 module.exports = User;

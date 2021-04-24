@@ -5,7 +5,7 @@ const validator = require('validator');
 const BankAccount = mongoose.model('bankaccount', {
  ppID:{
   type:String,
-  
+  required:true  
  },
  cash:{
   type:Number,
