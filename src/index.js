@@ -165,10 +165,12 @@ app.get(`/bank/allaccounts`, async (req, res)=>{
   }catch(err){console.log('err: ', err)} 
 });
 
-// app.get('/', (req, res)=>{
-//  try{ //res.render('index');
-//  }catch(error){console.log('error views', error)}
-// })
+app.get('/', async (req, res)=>{
+ try{ //res.render('index');
+  const users = await User.find({});
+    res.send(users);
+ }catch(error){console.log('error views', error)}
+})
 
 //retrive all users
 app.get('/bank/allusers', async(req, res)=>{
