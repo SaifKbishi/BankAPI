@@ -2,7 +2,7 @@ console.log('Server is running. this is from index.js');
 const cors = require('cors');
 const express = require('express');
 const app = express();
-const PORT = 3014;
+//const PORT = 3014;
 app.use(express.json());
 app.use(express.static('./src/public'));
 
@@ -181,4 +181,4 @@ app.get('/bank/allusers', async(req, res)=>{
 });
 
 
-app.listen(process.env.PORT || PORT, ()=>{console.log(`Server is listening to port ${PORT}`)});
+app.listen(process.env.PORT || 3014)//, ()=>{console.log(`Server is listening to port ${PORT}`)});
