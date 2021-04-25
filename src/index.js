@@ -7,6 +7,7 @@ app.use(express.json());
 require('./DB/mongoose');
 const User = require('./models/user');
 const BankAccount = require('./models/bankaccount');
+const Transaction = require('./models/transaction');
 
 const {displayAllAccounts, addNewAccount, changeAccountStatus, displayOneAccount, updateAccountDetails, deleteOneAcount, AddDeposit, withdrawMoney, updateAccountCredit, transferMoney, } = require("./utils");
 
@@ -16,32 +17,6 @@ app.put(`/api/accounts/transfer/:ppID1/:ppID2/:amount`, (req, res)=>{
  console.log(ppID1, ppID2,amount);
  const transfermoney = transferMoney(ppID1, ppID2,amount);
  res.status(200).send(transfermoney);
-});
-
-//withdraw money from an account
-app.put(`/api/accounts/withdraw/:ppID/:amount`, (req, res)=>{
- const {ppID,amount} = req.params;
- // const {cash,credit} = req.body; 
- console.log(ppID,amount);
- const withdrawmoney = withdrawMoney(ppID, amount);
- res.status(200).send(withdrawmoney);
-});
-
-//set credit to account
-app.put(`/api/accounts/credit/:ppID`, (req, res)=>{
- const {ppID} = req.params;
- const {credit} =req.body;
- const setCredit = updateAccountCredit(ppID, credit);
- res.status(200).send(setCredit);
-});
-
-//add deposit to account
-app.put(`/bank/deposit/:ppID`, async (req, res)=>{
- const {ppID} = req.params;
- const {cash} = req.body;
- 
- const addcash = AddDeposit(ppID, cash);
- res.status(200).send(addcash);
 });
 
 //toggle account status by name
@@ -68,15 +43,78 @@ app.delete(`/bank/delete/:name`, (req, res)=>{
 });
 
 //display one account
-app.get(`/bank/displayaccount/name`, (req,res)=>{
- 
+app.get(`/bank/displayaccount/name`, (req,res)=>{ 
  const {name} = req.params;
  console.log(name)
  const anAccount = displayOneAccount(name);
  res.status(200).send(anAccount);
 });
 
+app.get('/bank/account', async (req, res)=>{
+ const accountToFind = req.body; 
+ // const allAccounts = BankAccount.find({});
+ try{
+  await BankAccount.findOne({ppID: accountToFind});
+  res.status(300).send(accountToFind);
+ }catch(error){console.log('could not find account', error)}
+})
+
 /********************************************** */
+//withdraw money from an account
+app.put(`/bank/withdraw/`, async (req, res)=>{
+ const ppid = req.params.fromaccount;
+ const amountToWithdraw = req.params.amount;
+ const opType = req.body.optype;
+ const trn_number = req.body.tran_number; 
+ try{
+  const updatedAccount = await BankAccount.findOneAndUpdate({ppID : ppid},{$inc:{cash: -amountToWithdraw}},{new: true},(err, doc)=>{
+   if(err){console.log('somehting went wrong updating', err)}
+   // console.log('doc',doc)
+  });  
+  res.status(200).send(updatedAccount);
+ }catch(error){console.log('error withdraw', error)}
+
+ // try {
+ //  console.log('78 withdraw')
+ //  const updateTransaction = new Transaction({fromaccount: ppid}, {optype: opType}, {optype: opType},{amoun: amountToWithdraw});
+ //  await updateTransaction.save();
+ //  res.status(200).send(updateTransaction);
+ // } catch (error) {console.log('error updating transactions,  withdraw', error)}
+});
+
+//add deposit to account
+app.put(`/bank/deposit/`, async (req, res)=>{
+ const ppid = req.body.toaccount;
+ const amountToAdd = req.body.amount;
+ const opType = req.body.optype;
+ const trn_number = req.body.tran_number;
+ console.log('81:', ppid, amountToAdd, opType, trn_number);
+ try{
+ const updatedAccount = await BankAccount.findOneAndUpdate({ppID : ppid},{$inc:{cash: amountToAdd}},{new: true},(err, doc)=>{
+  if(err){console.log('somehting went wrong updating', err)}
+  // console.log('doc',doc)
+ });
+ res.status(200).send(updatedAccount);
+}catch(error){console.log('error deposit', error)}
+ 
+// const updateTransaction = new Transaction({toaccount: ppid}, {optype:opType}, {amount: amountToAdd});
+// await updateTransaction.save(); 
+ 
+});
+
+
+//set credit to account
+app.put(`/bank/credit/`, async (req, res)=>{
+ console.log('75',req.body, )
+ const ppID = req.body.ppID;
+ const newcredit =req.body.credit;
+ console.log('77',ppID , newcredit)
+ const updatedAccount = await BankAccount.findOneAndUpdate({ppID : ppID},{$set:{credit: newcredit}},{new: true},(err, doc)=>{
+  if(err){console.log('somehting went wrong updating', err)}
+  //console.log(doc)
+ });
+ res.status(200).send(updatedAccount);
+});
 
 //create new Bank Account
 app.post('/bank/newaccount/', async (req, res)=>{
@@ -101,7 +139,7 @@ app.post('/bank/newuser', async(req, res)=>{
   await newUser.save();
   res.status(201).send(newUser);
  }catch(error){
-  console.log('cannot craete user');
+  console.log('cannot create user');
   res.status(400).send({error});
  }
 });

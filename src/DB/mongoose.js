@@ -5,5 +5,6 @@ mongoose.connect('mongodb+srv://firstUser:FG12XZ123@cluster0.y3jty.mongodb.net/B
 {
  useNewUrlParser: true,
  useCreateIndex: true,
- useUnifiedTopology: true, 
+ useUnifiedTopology: true,
+ useFindAndModify: false, 
 });

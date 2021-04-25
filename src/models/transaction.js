@@ -1,20 +1,22 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 
-const Transaction = mongoose.model('user', {
- fromAccount:{
+const Transaction = mongoose.model('transaction', {
+ fromaccount:{
   type: String
  },
- ToAccount:{
+ toaccount:{
   type: String
  },
- OpType:{
+ optype:{
   type: String,
   required: true
  },
- Amount:{
-  type: Number
+ amount:{
+  type: Number,
+  required: true,
+  min:1
  }
-});//User
+});//Transaction
 
-module.exports = Transaction;
+module.exports = Transaction; 
