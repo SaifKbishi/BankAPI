@@ -168,7 +168,8 @@ app.get(`/bank/allaccounts`, async (req, res)=>{
 app.get('/', async (req, res)=>{
  try{ //res.render('index');
   const users = await User.find({});
-    res.send(users);
+  console.log('this is get /');
+  res.send(users);
  }catch(error){console.log('error views', error)}
 })
 
