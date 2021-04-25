@@ -1,4 +1,4 @@
-console.log('Server is running. this is from index.js');
+console.log('Server is running. this is from server index.js');
 const cors = require('cors');
 const express = require('express');
 const app = express();
@@ -114,10 +114,12 @@ app.put(`/bank/credit/`, async (req, res)=>{
  const ppID = req.body.ppID;
  const newcredit =req.body.credit;
  console.log('77',ppID , newcredit)
+ try{
  const updatedAccount = await BankAccount.findOneAndUpdate({ppID : ppID},{$set:{credit: newcredit}},{new: true},(err, doc)=>{
   if(err){console.log('somehting went wrong updating', err)}
   //console.log(doc)
  });
+}catch(error){console.log('error in credit', error)}
  res.status(200).send(updatedAccount);
 });
 
@@ -163,10 +165,11 @@ app.get(`/bank/allaccounts`, async (req, res)=>{
   }catch(err){console.log('err: ', err)} 
 });
 
-app.get('/', (req, res)=>{
- try{ //res.render('index');
- }catch(error){console.log('error views', error)}
-})
+// app.get('/', (req, res)=>{
+//  try{ //res.render('index');
+//  }catch(error){console.log('error views', error)}
+// })
+
 //retrive all users
 app.get('/bank/allusers', async(req, res)=>{
  const allUsers = User.find({});
