@@ -158,7 +158,8 @@ app.get(`/bank/allaccounts`, async (req, res)=>{
    (await allAccounts).forEach((account)=>{
     accountMap[account.ppID] = account;
    });
-   res.render('accounts', {users:usersMap}).status(200).send(accountMap);
+   //res.render('accounts', {users:usersMap}).status(200).send(accountMap);
+   res.status(200).send(accountMap);
   }catch(err){console.log('err: ', err)} 
 });
 
