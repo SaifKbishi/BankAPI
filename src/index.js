@@ -1,17 +1,18 @@
 console.log('Server is running. this is from index.js');
-
+const cors = require('cors');
 const express = require('express');
 const app = express();
-const PORT = 3015;
+const PORT = 3014;
 app.use(express.json());
 app.use(express.static('./src/public'));
+
 require('./DB/mongoose');
 const User = require('./models/user');
 const BankAccount = require('./models/bankaccount');
 const Transaction = require('./models/transaction');
 app.set('view engine', 'ejs');
 app.set('views', './src/views');
-
+app.use(cors());
 
 const {displayAllAccounts, addNewAccount, changeAccountStatus, displayOneAccount, updateAccountDetails, deleteOneAcount, AddDeposit, withdrawMoney, updateAccountCredit, transferMoney, } = require("./utils");
 
@@ -162,7 +163,7 @@ app.get(`/bank/allaccounts`, async (req, res)=>{
 });
 
 app.get('/', (req, res)=>{
- try{ res.render('index');
+ try{ //res.render('index');
  }catch(error){console.log('error views', error)}
 })
 //retrive all users
@@ -173,7 +174,8 @@ app.get('/bank/allusers', async(req, res)=>{
   (await allUsers).forEach((user)=>{
    usersMap[user._id] = user;
   });
-  res.render('users', {users : usersMap}).status(200).send(usersMap);
+  // res.render('users', {users : usersMap}).status(200).send(usersMap);
+  res.status(200).send(usersMap);
  }catch(err){console.log('err: ', err)} 
 });
 

@@ -1,0 +1,19 @@
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body>
+  <%- include("./partials/nav.ejs") %>
+
+  <div class="create-blog content">
+    <form action="/users" method="POST">
+      <label for="name">User name:</label>
+      <input type="text" id="name" name="name" >
+      <label for="email">Email:</label>
+      <input type="text" id="email" name="email" >
+      <label for="phone">Phone:</label>
+      <input type="text" id="phone" name="phone" >
+      <button>Submit</button>
+    </form>
+  </div>
+</body>
+</html>
