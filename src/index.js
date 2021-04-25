@@ -4,10 +4,14 @@ const express = require('express');
 const app = express();
 const PORT = 3015;
 app.use(express.json());
+app.use(express.static('./src/public'));
 require('./DB/mongoose');
 const User = require('./models/user');
 const BankAccount = require('./models/bankaccount');
 const Transaction = require('./models/transaction');
+app.set('view engine', 'ejs');
+app.set('views', './src/views');
+
 
 const {displayAllAccounts, addNewAccount, changeAccountStatus, displayOneAccount, updateAccountDetails, deleteOneAcount, AddDeposit, withdrawMoney, updateAccountCredit, transferMoney, } = require("./utils");
 
@@ -60,6 +64,7 @@ app.get('/bank/account', async (req, res)=>{
 })
 
 /********************************************** */
+
 //withdraw money from an account
 app.put(`/bank/withdraw/`, async (req, res)=>{
  const ppid = req.params.fromaccount;
@@ -101,7 +106,6 @@ app.put(`/bank/deposit/`, async (req, res)=>{
 // await updateTransaction.save(); 
  
 });
-
 
 //set credit to account
 app.put(`/bank/credit/`, async (req, res)=>{
@@ -153,10 +157,14 @@ app.get(`/bank/allaccounts`, async (req, res)=>{
    (await allAccounts).forEach((account)=>{
     accountMap[account.ppID] = account;
    });
-   res.status(200).send(accountMap);
+   res.render('accounts', {users:usersMap}).status(200).send(accountMap);
   }catch(err){console.log('err: ', err)} 
 });
 
+app.get('/', (req, res)=>{
+ try{ res.render('index');
+ }catch(error){console.log('error views', error)}
+})
 //retrive all users
 app.get('/bank/allusers', async(req, res)=>{
  const allUsers = User.find({});
@@ -165,7 +173,7 @@ app.get('/bank/allusers', async(req, res)=>{
   (await allUsers).forEach((user)=>{
    usersMap[user._id] = user;
   });
-  res.status(200).send(usersMap);
+  res.render('users', {users : usersMap}).status(200).send(usersMap);
  }catch(err){console.log('err: ', err)} 
 });
 
