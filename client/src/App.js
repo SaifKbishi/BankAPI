@@ -18,6 +18,7 @@ function App() {
     }catch(error){console.log('error fetching All Accounts', error)}    
   }  
   return (
+    document.title = 'BankAPI_FS React',
     <div className="App">
       <button onClick={allUsers}>All Users</button>
       <button onClick={allAccount}>All Accounts</button>

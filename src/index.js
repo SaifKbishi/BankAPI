@@ -15,14 +15,18 @@ app.set('views', './src/views');
 app.use(cors());
 
 /** */
+
 const path = require('path')
+console.log('18',path.join(__dirname, '../build'));
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
+  // app.use(express.static("client/build"));
+  
+  app.use(express.static(path.join(__dirname, '../build')));
 }
 // // app.use(routes);
 app.get("/",  (req, res) =>{
   console.log('from root')
-  res.sendFile(path.join(__dirname, "/build/index.html"));
+  res.sendFile(path.join(__dirname, "../build/index.html"));
   // res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 /** */
