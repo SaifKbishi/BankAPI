@@ -134,8 +134,9 @@ app.put(`/bank/credit/`, async (req, res)=>{
 //create new Bank Account
 app.post('/bank/newaccount/', async (req, res)=>{
  console.log('req.body',req.body,'this is from Post to create new record');
- const newAccount = new BankAccount(req.body);
- try{  
+//  const newAccount = new BankAccount(req.body);
+ try{
+  const newAccount = new BankAccount(req.body);
   console.log('new account', newAccount)
   await newAccount.save();  
   res.status(201).send(newAccount); 
@@ -148,8 +149,9 @@ app.post('/bank/newaccount/', async (req, res)=>{
 //create new user
 app.post('/bank/newuser', async(req, res)=>{
  console.log('new user', req.body);
- const newUser = new User(req.body);
+//  const newUser = new User(req.body);
  try{
+  const newUser = new User(req.body);
   console.log(newUser);
   await newUser.save();
   res.status(201).send(newUser);
@@ -162,8 +164,9 @@ app.post('/bank/newuser', async(req, res)=>{
 //retrieve All Accounts
 app.get(`/bank/allaccounts`, async (req, res)=>{
  console.log('alla accounts here')
- const allAccounts = BankAccount.find({});
+//  const allAccounts = BankAccount.find({}); 
   try{
+    const allAccounts = BankAccount.find({});
    let accountMap = {};
    (await allAccounts).forEach((account)=>{
     accountMap[account.ppID] = account;
