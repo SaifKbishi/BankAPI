@@ -16,6 +16,14 @@ app.use(cors());
 
 const {displayAllAccounts, addNewAccount, changeAccountStatus, displayOneAccount, updateAccountDetails, deleteOneAcount, AddDeposit, withdrawMoney, updateAccountCredit, transferMoney, } = require("./utils");
 
+app.get('/', async (req, res)=>{
+  try{ //res.render('index');
+   const users = await User.find({});
+   console.log('this is GET /');
+   res.send(users);
+  }catch(error){console.log('error views', error)}
+ })
+
 //transfering money between 2 active accounts
 app.put(`/api/accounts/transfer/:ppID1/:ppID2/:amount`, (req, res)=>{
  const {ppID1, ppID2, amount} = req.params;
@@ -165,13 +173,13 @@ app.get(`/bank/allaccounts`, async (req, res)=>{
   }catch(err){console.log('err: ', err)} 
 });
 
-app.get('/', async (req, res)=>{
- try{ //res.render('index');
-  const users = await User.find({});
-  console.log('this is get /');
-  res.send(users);
- }catch(error){console.log('error views', error)}
-})
+// app.get('/', async (req, res)=>{
+//  try{ //res.render('index');
+//   const users = await User.find({});
+//   console.log('this is GET /');
+//   res.send(users);
+//  }catch(error){console.log('error views', error)}
+// })
 
 //retrive all users
 app.get('/bank/allusers', async(req, res)=>{
