@@ -13,8 +13,8 @@ const NewUser =()=>{
    "phone": phone
   }
   try{   
-   const userToAdd = axios.post('/bank/newuser', newuser);
-   await userToAdd.save();
+   const userToAdd = await axios.post('/bank/newuser', newuser);
+   userToAdd.save();
   }catch(error){console.log('not able to create user from NewUser.js', error)}
  }
 

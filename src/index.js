@@ -140,19 +140,19 @@ app.get('/', async (req, res)=>{
 // });
 
 //create new Bank Account
-// app.post('/bank/newaccount/', async (req, res)=>{
-//  console.log('req.body',req.body,'this is from Post to create new record');
-// //  const newAccount = new BankAccount(req.body);
-//  try{
-//   const newAccount = new BankAccount(req.body);
-//   console.log('new account', newAccount)
-//   await newAccount.save();  
-//   res.status(201).send(newAccount); 
-//  }catch(error){
-//   console.log('could not create new Bank Account');
-//   res.status(400).send({error});
-//  }
-// });
+app.post('/bank/newaccount/', async (req, res)=>{
+ console.log('req.body',req.body,'this is from Post to create new record');
+//  const newAccount = new BankAccount(req.body);
+ try{
+  const newAccount = new BankAccount(req.body);
+  console.log('new account', newAccount)
+  await newAccount.save();  
+  res.status(201).send(newAccount); 
+ }catch(error){
+  console.log('could not create new Bank Account');
+  res.status(400).send({error});
+ }
+});
 
 //create new user
 app.post('/bank/newuser', async(req, res)=>{
