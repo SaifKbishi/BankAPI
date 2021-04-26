@@ -14,6 +14,19 @@ app.set('view engine', 'ejs');
 app.set('views', './src/views');
 app.use(cors());
 
+/** */
+const path = require('path')
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+// // app.use(routes);
+app.get("/",  (req, res) =>{
+  console.log('from root')
+  res.sendFile(path.join(__dirname, "/index.html"));
+  // res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+/** */
+
 //const {displayAllAccounts, addNewAccount, changeAccountStatus, displayOneAccount, updateAccountDetails, deleteOneAcount, AddDeposit, withdrawMoney, updateAccountCredit, transferMoney, } = require("./utils");
 
 app.get('/', async (req, res)=>{
@@ -196,5 +209,5 @@ app.get('/bank/allusers', async(req, res)=>{
  }catch(err){console.log('err: ', err)} 
 });
 
-
-app.listen(process.env.PORT || 3014)//, ()=>{console.log(`Server is listening to port ${PORT}`)});
+const PORT = process.env.PORT || 3014;
+app.listen(PORT, ()=>{console.log(`Server is listening to port ${PORT}`)});
