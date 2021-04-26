@@ -2,34 +2,26 @@ console.log('Server is running. this is from server index.js');
 const cors = require('cors');
 const express = require('express');
 const app = express();
-//const PORT = 3014;
 app.use(express.json());
 app.use(express.static('./src/public'));
+// const route = require('./routers');
 
 require('./DB/mongoose');
 const User = require('./models/user');
 const BankAccount = require('./models/bankaccount');
 const Transaction = require('./models/transaction');
-app.set('view engine', 'ejs');
-app.set('views', './src/views');
 app.use(cors());
 
-/** */
 
-const path = require('path')
-console.log('18',path.join(__dirname, '../build'));
-if (process.env.NODE_ENV === "production") {
-  // app.use(express.static("client/build"));
-  
+const path = require('path');
+if (process.env.NODE_ENV === "production") {  
   app.use(express.static(path.join(__dirname, '../build')));
 }
-// // app.use(routes);
+
 app.get("/",  (req, res) =>{
-  console.log('from root')
   res.sendFile(path.join(__dirname, "../build/index.html"));
-  // res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-/** */
+
 
 //const {displayAllAccounts, addNewAccount, changeAccountStatus, displayOneAccount, updateAccountDetails, deleteOneAcount, AddDeposit, withdrawMoney, updateAccountCredit, transferMoney, } = require("./utils");
 
@@ -90,6 +82,7 @@ app.get('/', async (req, res)=>{
 // })
 
 /********************************************** */
+
 
 //withdraw money from an account
 // app.put(`/bank/withdraw/`, async (req, res)=>{
@@ -162,24 +155,28 @@ app.get('/', async (req, res)=>{
 // });
 
 //create new user
-// app.post('/bank/newuser', async(req, res)=>{
-//  console.log('new user', req.body);
-// //  const newUser = new User(req.body);
-//  try{
-//   const newUser = new User(req.body);
-//   console.log(newUser);
-//   await newUser.save();
-//   res.status(201).send(newUser);
-//  }catch(error){
-//   console.log('cannot create user');
-//   res.status(400).send({error});
-//  }
-// });
+app.post('/bank/newuser', async(req, res)=>{
+ console.log('new user', req.body);
+ try{
+  const newUser = new User(req.body);
+  console.log(newUser);
+  await newUser.save();
+  res.status(201).send(newUser);
+ }catch(error){
+  console.log('cannot create user',error);
+  res.status(400).send({error});
+ }
+});
+
+app.delete('/bank/deleteusers', async(req,res)=>{
+  try{
+    const deleteAllUsers = await User.deleteMany({});
+    res.send(deleteAllUsers);
+  }catch(error){console.log('error delating all records: ', error)}
+})
 
 //retrieve All Accounts
 app.get(`/bank/allaccounts`, async (req, res)=>{
- console.log('All accounts here')
-//  const allAccounts = BankAccount.find({}); 
   try{
     const allAccounts = BankAccount.find({});
    let accountMap = {};
@@ -201,14 +198,12 @@ app.get(`/bank/allaccounts`, async (req, res)=>{
 
 //retrive all users
 app.get('/bank/allusers', async(req, res)=>{
-  // const allUsers = User.find({});
  try{
   const allUsers = User.find({});
   let usersMap = {};
   (await allUsers).forEach((user)=>{
    usersMap[user._id] = user;
   });
-  // res.render('users', {users : usersMap}).status(200).send(usersMap);
   res.status(200).send(usersMap);
  }catch(err){console.log('err: ', err)} 
 });

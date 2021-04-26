@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.newUser input, .newAccount input{
+  margin: 3px;
+}

@@ -21,7 +21,7 @@ const User = mongoose.model('user', {
   required:true,
   validate(value){
    if (!validator.isMobilePhone(value, "he-IL")) {
-     throw new Error("phone number most be a valid isrealy phone number");
+     throw new Error("Phone number must be a valid Israely phone number");
    }
   },
  },
