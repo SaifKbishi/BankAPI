@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === "production") {
 // // app.use(routes);
 app.get("/",  (req, res) =>{
   console.log('from root')
-  res.sendFile(path.join(__dirname, "/index.html"));
+  res.sendFile(path.join(__dirname, "/build/index.html"));
   // res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 /** */
