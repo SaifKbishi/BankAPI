@@ -3,9 +3,6 @@ const cors = require('cors');
 const express = require('express');
 const path = require("path");
 const app = express();
-// const route = require('./routes');
-
-// console.log('8',route) 
 
 const User = require('./models/user');
 const BankAccount = require('./models/bankaccount');
@@ -198,17 +195,17 @@ app.get(`/bank/allaccounts`, async (req, res)=>{
 //  }catch(error){console.log('error views', error)}
 // })
 
-//retrive all users
-// app.get('/bank/allusers', async(req, res)=>{
-//  try{
-//   const allUsers = User.find({});
-//   let usersMap = {};
-//   (await allUsers).forEach((user)=>{
-//    usersMap[user._id] = user;
-//   });
-//   res.status(200).send(usersMap);
-//  }catch(err){console.log('err: ', err)} 
-// });
+// retrive all users
+app.get('/bank/allusers', async(req, res)=>{
+ try{
+  const allUsers = User.find({});
+  let usersMap = {};
+  (await allUsers).forEach((user)=>{
+   usersMap[user._id] = user;
+  });
+  res.status(200).send(usersMap);
+ }catch(err){console.log('err: ', err)} 
+});
 
 const PORT = process.env.PORT || 3014;
 app.listen(PORT, ()=>{console.log(`Server is listening to port ${PORT}`)});
