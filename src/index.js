@@ -1,19 +1,22 @@
 console.log('Server is running. this is from server index.js');
 const cors = require('cors');
 const express = require('express');
+const path = require("path");
 const app = express();
-app.use(express.json());
-app.use(express.static('./src/public'));
-// const route = require('./routers');
+// const route = require('./routes');
 
-require('./DB/mongoose');
+// console.log('8',route) 
+
 const User = require('./models/user');
 const BankAccount = require('./models/bankaccount');
 const Transaction = require('./models/transaction');
+
+require('./DB/mongoose');
+app.use(express.static('./src/public'));
 app.use(cors());
+app.use(express.json());
+// app.use('/', route);
 
-
-const path = require('path');
 if (process.env.NODE_ENV === "production") {  
   app.use(express.static(path.join(__dirname, '../build')));
 }
@@ -21,7 +24,6 @@ if (process.env.NODE_ENV === "production") {
 app.get("/",  (req, res) =>{
   res.sendFile(path.join(__dirname, "../build/index.html"));
 });
-
 
 //const {displayAllAccounts, addNewAccount, changeAccountStatus, displayOneAccount, updateAccountDetails, deleteOneAcount, AddDeposit, withdrawMoney, updateAccountCredit, transferMoney, } = require("./utils");
 
@@ -197,16 +199,16 @@ app.get(`/bank/allaccounts`, async (req, res)=>{
 // })
 
 //retrive all users
-app.get('/bank/allusers', async(req, res)=>{
- try{
-  const allUsers = User.find({});
-  let usersMap = {};
-  (await allUsers).forEach((user)=>{
-   usersMap[user._id] = user;
-  });
-  res.status(200).send(usersMap);
- }catch(err){console.log('err: ', err)} 
-});
+// app.get('/bank/allusers', async(req, res)=>{
+//  try{
+//   const allUsers = User.find({});
+//   let usersMap = {};
+//   (await allUsers).forEach((user)=>{
+//    usersMap[user._id] = user;
+//   });
+//   res.status(200).send(usersMap);
+//  }catch(err){console.log('err: ', err)} 
+// });
 
 const PORT = process.env.PORT || 3014;
 app.listen(PORT, ()=>{console.log(`Server is listening to port ${PORT}`)});

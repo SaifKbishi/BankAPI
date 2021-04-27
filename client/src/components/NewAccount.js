@@ -26,7 +26,7 @@ const NewAccount =()=>{
   <div className="newAccount">
     <h4>Create new Bank Account</h4>
     <h6>{randomAccountNumber}</h6>
-    <input id='ppID' placeholder='ppID' onChange={(e)=>setPPID(e.target.value)}  value={randomAccountNumber} />
+    <input id='ppID' placeholder='ppID' onChange={(e)=>setPPID(e.target.value)}  value={randomAccountNumber} />    
     <input id='cash' placeholder='cash' onChange={(e)=>setCash(e.target.value)} value={cash} />
     <input id='credit' placeholder='credit' onChange={(e)=>setCredit(e.target.value)} value={credit} />
 
